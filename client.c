@@ -53,14 +53,14 @@ int main(int argc, char *argv[]) {
     char buffer[BUFFER_SIZE];
 
     // Receive initial message
-    ssize_t received = recv(sock, buffer, sizeof(buffer) - 1, 0);
-    if (received < 0) {
+    ssize_t received_data = recv(sock, buffer, sizeof(buffer) - 1, 0);
+    if (received_data < 0) {
         perror("Initial receive failed");
         close(sock);
         return EXIT_FAILURE;
     }
-    buffer[received] = '\0';
-    printf("Server: %s\n", buffer);
+    buffer[received_data] = '\0';
+    printf("Server asked messages: %s\n", buffer);
 
     // Open payload file
     FILE *file = fopen(filename, "rb");
@@ -94,14 +94,14 @@ int main(int argc, char *argv[]) {
     }
 
     // Receive server data - password
-    received = recv(sock, buffer, sizeof(buffer) - 1, 0);
-    if (received < 0) {
+    received_data = recv(sock, buffer, sizeof(buffer) - 1, 0);
+    if (received_data < 0) {
         perror("receive data from server failed");
         close(sock);
         return EXIT_FAILURE;
     }
-    buffer[received] = '\0';
-    printf("Response: %s\n", buffer);
+    buffer[received_data] = '\0';
+    printf("Response fom server: %s\n", buffer);
 
     close(sock);
     return EXIT_SUCCESS;
