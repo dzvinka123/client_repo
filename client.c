@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-#define DEFAULT_FILENAME "passwd.txt"
 #define BUFFER_SIZE 2048
 #define PAYLOAD_SIZE 113
 
@@ -20,7 +19,13 @@ int main(int argc, char *argv[]) {
 
     const char *ip_address = argv[1];
     int port = atoi(argv[2]);
-    const char *filename = (argc >= 4) ? argv[3] : DEFAULT_FILENAME;
+    
+    const char *filename;
+    if (argc >= 4) {
+        filename = argv[3];
+    } else {
+        filename = "passwd.txt";
+    }
 
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
@@ -88,10 +93,10 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Receive final response
+    // Receive server data - password
     received = recv(sock, buffer, sizeof(buffer) - 1, 0);
     if (received < 0) {
-        perror("Final receive failed");
+        perror("receive data from server failed");
         close(sock);
         return EXIT_FAILURE;
     }
